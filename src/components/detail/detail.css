@@ -1,3 +1,38 @@
 .detail {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    position: relative;
+}
+
+.detail .user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.detail .user img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.detail .block {
+    background-color: #f70e0e;
+    color: #fff;
+    border: none;
+    outline: none;
+    padding: 10px 80px;
+    border-radius: 12px;
+    cursor: pointer;
+    align-self: center;
+    margin-top: 40px;
+    font-size: 16px;
+    font-weight: bold;
 }

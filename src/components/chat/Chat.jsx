@@ -1,10 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './chat.css'
 import EmojiPicker from 'emoji-picker-react';
 
 export default function Chat() {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [message, setMessage] = useState('');
+
+    const endRef = useRef(null);
+
+    useEffect(() => {
+        endRef.current.scrollIntoView();
+    }, []);
 
     const handleEmojiClick = (emoji) => {
         setMessage(message + emoji.emoji);
@@ -61,6 +67,7 @@ export default function Chat() {
                         <span>12:00</span>
                     </div>
                 </div>
+                <div ref={endRef}></div>
             </div>
 
             <div className='bottom'>

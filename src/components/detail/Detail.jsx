@@ -8,6 +8,7 @@ export default function Detail() {
                 <p>John Doe</p>
             </div>
             <button className='block'>Block User</button>
+            <button className='logout'>Logout</button>
         </div>
     )
 }

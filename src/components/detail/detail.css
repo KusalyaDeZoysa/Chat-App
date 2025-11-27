@@ -35,4 +35,26 @@
     margin-top: 40px;
     font-size: 16px;
     font-weight: bold;
+
+    &:hover{
+        background-color: #fc4a4a;
+    }
+}
+
+.detail .logout {
+    background-color: #01002986;
+    color: #fff;
+    border: none;
+    outline: none;
+    padding: 10px 80px;
+    border-radius: 12px;
+    cursor: pointer;
+    align-self: center;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+
+    &:hover{
+        background-color: #171d559d;
+    }
 }

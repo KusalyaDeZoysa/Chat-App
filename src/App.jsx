@@ -7,7 +7,7 @@ import Notification from "./components/notification/Notification"
 import Register from "./components/register/Register"
 
 function App() {
-  const user = false
+  const user = true
 
   if (user) {
     return (

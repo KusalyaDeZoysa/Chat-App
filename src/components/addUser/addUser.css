@@ -9,7 +9,7 @@
     margin: auto;
     background-color: #021724;
     border-radius: 12px;
-    padding: 20px;
+    padding: 20px 50px;
 
     form {
         display: flex;
@@ -40,11 +40,14 @@
     margin-top: 50px;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
 
     .detail {
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: flex-start;
         gap: 10px;
         /* flex-wrap: nowrap; */
 
@@ -66,7 +69,7 @@
         color: #000;
         border: none;
         outline: none;
-        padding: 10px;
+        padding: 10px 20px;
         border-radius: 12px;
         cursor: pointer;
     }

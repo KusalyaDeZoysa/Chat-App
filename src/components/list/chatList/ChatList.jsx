@@ -66,7 +66,7 @@ export default function ChatList() {
                     <p>Last message</p>
                 </div>
             </div>
-            <AddUser/>
+            {addMode && <AddUser/>}
         </div>
     )
 }

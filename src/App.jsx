@@ -7,27 +7,55 @@ import Notification from "./components/notification/Notification"
 import Register from "./components/register/Register"
 import { useEffect, useState } from "react"
 import { onAuthStateChanged } from "firebase/auth"
-import { auth } from "./config/firebase"
+import { auth, db } from "./config/firebase"
+import { useSelector, useDispatch } from "react-redux"
+import { loginSuccess, logout } from "./redux/slices/userSlice"
+import { doc, getDoc } from "firebase/firestore"
 
 function App() {
-  // const user = false;
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.user.currentUser);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Listen for auth state changes
-    const unSub = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log(user);
-        setUser(user);
+    const unSub = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        // User is authenticated - fetch user data from Firestore and restore Redux state
+        try {
+          const userDocRef = doc(db, "users", firebaseUser.uid);
+          const userDocSnap = await getDoc(userDocRef);
+          
+          if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            dispatch(loginSuccess({
+              id: firebaseUser.uid,
+              username: userData.username,
+              email: userData.email,
+              blocked: userData.blocked || [],
+            }));
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          dispatch(logout());
+        }
+      } else {
+        // User is not authenticated - clear Redux state
+        dispatch(logout());
       }
+      setLoading(false);
     });
 
     // Cleanup function to unsubscribe from the auth state change listener
     return () => {
       unSub();
     }
+  }, [dispatch])
 
-  },[])
+
+  if (loading) {
+    return <div>Loading...</div>; 
+  }
 
   if (user) {
     return (

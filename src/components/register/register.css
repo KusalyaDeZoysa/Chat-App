@@ -59,6 +59,12 @@
         &:hover {
             background-color: #61bff59d;
         }
+
+        &:disabled {
+            background-color: #989b9c9d;
+            cursor: not-allowed;
+            color: #fff;
+        }
     }
     label {
         display: flex;

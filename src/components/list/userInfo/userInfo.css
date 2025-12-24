@@ -7,13 +7,7 @@
         display: flex;
         gap: 10px;
         align-items: center;
-    
-        img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
+        margin-top: 0;
     }
     
     .icons {
@@ -26,4 +20,16 @@
           cursor: pointer;
         }
       }
+}
+
+.avatar-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    font-weight: bold;
+    color: #000000;
 }

@@ -52,7 +52,7 @@ function App() {
     }
   }, [dispatch])
 
-
+  console.log(user);
   if (loading) {
     return <div>Loading...</div>; 
   }

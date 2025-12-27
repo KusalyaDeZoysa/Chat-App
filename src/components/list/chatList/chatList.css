@@ -51,11 +51,16 @@
     align-items: center;
 }
 
-.chat-list .item img {
+.chat-list .item .avatar-circle {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    font-weight: bold;
+    color: #000000;
     margin-right: 10px;
     margin-left: 20px;
 }

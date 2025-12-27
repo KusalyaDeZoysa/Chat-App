@@ -1,9 +1,11 @@
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, setDoc, serverTimestamp, doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import './addUser.css'
 import { db } from '../../config/firebase';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function AddUser() {
+    const {currentUser} = useSelector((state) => state.user);
     const [user, setUser] = useState(null);
 
     const getColor = (name) => {
@@ -29,6 +31,41 @@ export default function AddUser() {
         }
     }
 
+    const handleAdd = async() => {
+        const chatRef = collection(db, "chats");
+        const userChatsRef = collection(db, "userchats");
+
+        try {
+            const newChatRef = doc(chatRef);
+            await setDoc(newChatRef, {
+                createdAt: serverTimestamp(),
+                messages: []
+            })
+
+            await updateDoc(doc(userChatsRef, user.id), {
+                chats: arrayUnion({
+                    chatId: newChatRef.id,
+                    lastMessage: "",
+                    receiverId: currentUser.id,
+                    updatedAt: Date.now()
+                }),
+            });
+
+            await updateDoc(doc(userChatsRef, currentUser.id), {
+                chats: arrayUnion({
+                    chatId: newChatRef.id,
+                    lastMessage: "",
+                    receiverId: user.id,
+                    updatedAt: Date.now()
+                }),
+            });
+
+            console.log("New chat created with ID:", newChatRef.id);
+        } catch (error) {
+            console.log("Error adding user:", error)
+        }
+    }
+
     console.log("searched user:", user)
     return (
         <div className="addUser">
@@ -46,7 +83,7 @@ export default function AddUser() {
                     </div>
                     <p>{user.username}</p>
                 </div>
-                <button>Add</button>
+                <button onClick={handleAdd}>Add</button>
             </div>}
         </div>
     )

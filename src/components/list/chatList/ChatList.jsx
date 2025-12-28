@@ -1,15 +1,19 @@
 ﻿import { useEffect, useState } from "react"
 import "./chatList.css"
 import AddUser from "../../addUser/AddUser"
-import { useSelector } from "react-redux"
-import { doc, getDoc, onSnapshot } from "firebase/firestore"
+import { useSelector, useDispatch } from "react-redux"
+import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore"
 import { db } from "../../../config/firebase"
+import { changeChat } from "../../../redux/slices/chatSlice"
 
 export default function ChatList() {
     const [addMode, setAddMode] = useState(false)
     const [chats, setChats] = useState([])
+    const [input, setInput] = useState("")
 
     const { currentUser } = useSelector((state) => state.user)
+
+    const dispatch = useDispatch()
 
     const getColor = (name) => {
         const colors = ["#FF6B6B", "#6B5BFF", "#FFD93D", "#4ECDC4", "#FF8C42", "#45B7D1"];
@@ -28,12 +32,12 @@ export default function ChatList() {
                 const userDocSnap = await getDoc(userDocRef)
 
                 const user = userDocSnap.data()
-                
+
                 return { ...item, user }
             })
             const chatData = await Promise.all(promisses)
             console.log("chatData...x", chatData)
-            setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt) )
+            setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt))
         })
         return () => {
             unsub()
@@ -43,12 +47,36 @@ export default function ChatList() {
     console.log("chats...y", chats)
     console.log("user...z", chats.user)
 
+    const handleChatSelect = async (chat) => {
+
+        const userChats = chats.map((item) => {
+            const {user, ...rest} = item;
+            return rest;
+        });
+        const chatIndex = userChats.findIndex(c => c.chatId === chat.chatId);
+        userChats[chatIndex].isSeen = true;
+
+        try {
+            await updateDoc(doc(db, "userchats", currentUser.id), {
+                chats: userChats
+            });  
+            dispatch(changeChat({ currentUser, chatId: chat.chatId, user: chat.user }))          
+        } catch (error) {
+            console.log("Error updating isSeen status:", error);
+        }
+        console.log("selected chat...", chat)
+    }
+
+    const filteredChats = chats.filter((chat) =>
+        chat.user.username.toLowerCase().includes(input.toLowerCase())
+    );
+
     return (
         <div className="chat-list">
             <div className="search">
                 <div className="searchBar">
                     <img src="./search.png" alt="" />
-                    <input type="text" placeholder="Search" />
+                    <input type="text" placeholder="Search" onChange={(e) => setInput(e.target.value)}/>
                 </div>
                 <img
                     src={addMode ? "./minus.png" : "./plus.png"}
@@ -56,8 +84,16 @@ export default function ChatList() {
                     onClick={() => setAddMode(!addMode)}
                 />
             </div>
-            {chats.map((chat) => (
-                <div className="item" key={chat.chatId}>
+            {filteredChats.map((chat) => (
+                <div
+                    className="item"
+                    key={chat.chatId}
+                    onClick={() => handleChatSelect(chat)}
+                    style={{
+                        backgroundColor: chat?.isSeen ? "transparent" : "#bcf5ddaf",
+                        cursor: "pointer"
+                    }}
+                >
                     <div
                         className="avatar-circle"
                         style={{ backgroundColor: getColor(chat.user.username) }}
@@ -70,14 +106,6 @@ export default function ChatList() {
                     </div>
                 </div>
             ))}
-
-            {/* <div className="item">
-                <img src="./avatar.png" alt="" />
-                <div className="info">
-                    <span>John Doe</span>
-                    <p>Last message</p>
-                </div>
-            </div> */}
 
             {addMode && <AddUser />}
         </div>

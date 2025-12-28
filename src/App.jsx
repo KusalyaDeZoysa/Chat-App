@@ -13,7 +13,10 @@ import { loginSuccess, logout } from "./redux/slices/userSlice"
 import { doc, getDoc } from "firebase/firestore"
 
 function App() {
+
   const user = useSelector((state) => state.user.currentUser);
+  const {chatId} = useSelector((state) => state.chat);
+
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
 
@@ -61,8 +64,8 @@ function App() {
     return (
       <div className="container">
         <List />
-        <Chat />
-        <Detail />
+        {chatId && <Chat />}
+        {chatId && <Detail />}
       </div>
     )
   }

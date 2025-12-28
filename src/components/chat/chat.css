@@ -21,11 +21,16 @@
     padding: 20px;
 }
 
-.chat .top .userInfo img {
+.chat .top .userInfo .avatar-circle {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    font-weight: bold;
+    color: #000000;
 }
 
 .chat .top .icons {
@@ -74,11 +79,16 @@
         }
     }
 
-    img {
+    .avatar-circle {
         width: 30px;
         height: 30px;
         border-radius: 50%;
-        object-fit: cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        font-weight: bold;
+        color: #000000;
     }
 
     .text {
@@ -139,6 +149,10 @@
     color: #fff;
     padding: 10px;
     border-radius: 12px;
+
+    &:disabled {
+        cursor: not-allowed;
+    }
 }
 
 .bottom .emoji {
@@ -158,6 +172,11 @@
     padding: 10px;
     border-radius: 12px;
     cursor: pointer;
+
+    &:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+    }
 }
 
 .emojiPicker {

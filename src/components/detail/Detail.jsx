@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth, db } from '../../config/firebase';
 import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
-import { changeBlock } from '../../redux/slices/chatSlice';
+import { changeBlock, resetChat } from '../../redux/slices/chatSlice';
 
 export default function Detail() {
     const dispatch = useDispatch();
@@ -38,7 +38,8 @@ export default function Detail() {
     const handleLogout = async () => {
         try {
             await signOut(auth); // Sign out from Firebase Auth
-            dispatch(logout()); // Clear Redux state
+            dispatch(logout()); // Clear Redux user state
+            dispatch(resetChat()); // Clear Redux chat state
             navigate('/');
         } catch (error) {
             console.error("Error signing out:", error);
@@ -56,7 +57,12 @@ export default function Detail() {
                 </div>
                 <p>{user?.username}</p>
             </div>
-            <button className='block' onClick={handleBlocked}>
+            <button 
+                className='block' 
+                onClick={handleBlocked}
+                disabled={isCurrentUserBlocked}
+                style={{ cursor: isCurrentUserBlocked ? 'not-allowed' : 'pointer' }}
+            >
                 {isCurrentUserBlocked
                     ? "You are blocked"
                     : isReceiverBlocked

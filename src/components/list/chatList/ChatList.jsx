@@ -31,7 +31,7 @@ export default function ChatList() {
                 const userDocRef = doc(db, "users", item.receiverId)
                 const userDocSnap = await getDoc(userDocRef)
 
-                const user = userDocSnap.data()
+                const user = { ...userDocSnap.data(), id: item.receiverId }
 
                 return { ...item, user }
             })
@@ -59,8 +59,14 @@ export default function ChatList() {
         try {
             await updateDoc(doc(db, "userchats", currentUser.id), {
                 chats: userChats
-            });  
-            dispatch(changeChat({ currentUser, chatId: chat.chatId, user: chat.user }))          
+            });
+            
+            // Fetch fresh user data to get the latest blocked status
+            const userDocRef = doc(db, "users", chat.user.id || chat.receiverId);
+            const userDocSnap = await getDoc(userDocRef);
+            const freshUserData = { ...userDocSnap.data(), id: chat.user.id || chat.receiverId };
+            
+            dispatch(changeChat({ currentUser, chatId: chat.chatId, user: freshUserData }));
         } catch (error) {
             console.log("Error updating isSeen status:", error);
         }

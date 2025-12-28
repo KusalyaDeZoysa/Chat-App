@@ -1,7 +1,16 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './userInfo.css'
+import { signOut } from 'firebase/auth';
+import { auth } from '../../../config/firebase';
+import { logout } from '../../../redux/slices/userSlice';
+import { resetChat } from '../../../redux/slices/chatSlice';
+import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 export default function UserInfo() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { currentUser } = useSelector((state) => state.user);
     const displayName = currentUser.username;
@@ -12,6 +21,16 @@ export default function UserInfo() {
         return colors[displayName.length % colors.length];
     };
 
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            dispatch(logout());
+            dispatch(resetChat());
+            navigate('/');
+        } catch (error) {
+            console.error("Error signing out:", error);
+        }
+    };
 
     return (
         <div className="user-info">
@@ -25,9 +44,12 @@ export default function UserInfo() {
                 <p>{displayName}</p>
             </div>
             <div className='icons'>
-                <img src="./more.png" alt='' img />
-                <img src="./video.png" alt='' img />
-                <img src="./edit.png" alt='' img />
+                <FontAwesomeIcon 
+                    icon={faRightFromBracket} 
+                    onClick={handleLogout} 
+                    title="Logout" 
+                    style={{ cursor: 'pointer', fontSize: '20px' }} 
+                />
             </div>
         </div>
     )

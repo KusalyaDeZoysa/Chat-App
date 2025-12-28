@@ -3,18 +3,20 @@ import './chat.css'
 import EmojiPicker from 'emoji-picker-react';
 import { onSnapshot, doc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
 import { db } from "../../config/firebase"
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeChat } from '../../redux/slices/chatSlice';
 
 export default function Chat() {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [message, setMessage] = useState('');
     const [chat, setChat] = useState(null);
 
+    const dispatch = useDispatch();
     const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } = useSelector((state) => state.chat);
     const { currentUser } = useSelector((state) => state.user);
 
-    console.log("testing user...", user.id);
-    console.log("testing currentuser...", currentUser.id);
+    console.log("testing user...", user?.id);
+    console.log("testing currentuser...", currentUser?.id);
 
     const endRef = useRef(null);
 
@@ -23,6 +25,8 @@ export default function Chat() {
     }, []);
 
     useEffect(() => {
+        if (!chatId) return;
+        
         const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
             setChat(res.data());
         });
@@ -31,6 +35,21 @@ export default function Chat() {
             unSub();
         }
     }, [chatId]);
+
+    // Listen for real-time changes to the receiver's user document (for block status)
+    useEffect(() => {
+        if (!user?.id) return;
+
+        const unSub = onSnapshot(doc(db, "users", user.id), (res) => {
+            const updatedUser = { ...res.data(), id: user.id };
+            // Re-dispatch changeChat to update block status
+            dispatch(changeChat({ currentUser, chatId, user: updatedUser }));
+        });
+
+        return () => {
+            unSub();
+        }
+    }, [user?.id, chatId, currentUser, dispatch]);
 
     console.log("chat data...", chat);
 

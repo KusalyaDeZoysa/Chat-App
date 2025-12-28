@@ -17,7 +17,7 @@ const chatSlice = createSlice({
             //check if the current user is blocked
             if (user.blocked.includes(currentUser.id)) {
                 state.chatId = chatId;
-                state.user = null;
+                state.user = user;
                 state.isCurrentUserBlocked = true;
                 state.isReceiverBlocked = false;
             }
@@ -42,9 +42,16 @@ const chatSlice = createSlice({
         changeBlock: (state, action) => {
             const { isReceiverBlocked } = action.payload;
             state.isReceiverBlocked = !isReceiverBlocked;
+        },
+
+        resetChat: (state) => {
+            state.chatId = null;
+            state.user = null;
+            state.isCurrentUserBlocked = false;
+            state.isReceiverBlocked = false;
         }
     }
 })
 
-export const { changeChat, changeBlock } = chatSlice.actions;
+export const { changeChat, changeBlock, resetChat } = chatSlice.actions;
 export default chatSlice.reducer;

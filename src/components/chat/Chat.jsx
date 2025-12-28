@@ -133,7 +133,7 @@ export default function Chat() {
                         </div>
                         <div className='text'>
                             <p>{msg.text}</p>
-                            <span>12:00</span>
+                            <span>{msg.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
                     </div>
                 ))}

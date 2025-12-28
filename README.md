@@ -1,16 +1,64 @@
-# React + Vite
+# Firebase Chat App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A real-time chat application built with React, Firebase, and Redux.
 
-Currently, two official plugins are available:
+## Screenshots
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Login Page
+<img src="public/images/4.JPG" alt="Login Page" width="400">
 
-## React Compiler
+### Chat List
+<img src="public/images/3.JPG" alt="Chat List" width="400">
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Chat View
+<img src="public/images/1.JPG" alt="Chat View" width="400">
+<img src="public/images/2.JPG" alt="Chat View" width="400">
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 🔐 User Authentication (Login/Register)
+- 💬 Real-time Messaging
+- 👤 User Profile with Avatar
+- 🔍 Search Users
+- ➕ Add New Contacts
+- 🚫 Block/Unblock Users
+- 😀 Emoji Picker
+- 🔔 Unread Message Indicators
+
+## Tech Stack
+
+- **Frontend:** React 19, Redux Toolkit
+- **Backend:** Firebase (Authentication, Firestore)
+- **Build Tool:** Vite
+- **Styling:** CSS
+- **Icons:** Font Awesome
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v20.19.0 or higher)
+- npm
+- Firebase Account
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/your-username/Firebase-Chat-App.git
+cd Firebase-Chat-App/chat-app
+```
+
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Create a Firebase project and add your config to `src/config/firebase.js`
+
+4. Set up Firestore rules (see Firebase Console)
+
+5. Run the development server
+```bash
+npm run dev
+```
